@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  gallery:
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - mysqldb
+  mysqldb:
+    image: mysql
+    ports:
+      - "3306:3360"
+    environment:
+      - MYSQL_DATABASE=gallery
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - mysqldb-data:/var/lib/mysql
+
+volumes:
+  mysqldb-data:
