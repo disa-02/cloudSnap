@@ -1,11 +1,5 @@
 version: "3.9"
 services:
-  gallery:
-    build: .
-    ports:
-      - "8080:8080"
-    links:
-      - mysqldb
   mysqldb:
     image: mysql
     ports:
@@ -13,8 +7,16 @@ services:
     environment:
       - MYSQL_DATABASE=gallery
       - MYSQL_ROOT_PASSWORD=password
-    volumes:
-      - mysqldb-data:/var/lib/mysql
 
-volumes:
-  mysqldb-data:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/gallery
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    restart: on-failure:10
+
